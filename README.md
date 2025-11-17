@@ -33,6 +33,11 @@ INSERT INTO "tec-practicantes-todo" VALUE {
 };
 
 📡 Consumir la API con Postman (o cualquier cliente REST)
+
+⚠️ Importante: La URL de la API cambia para cada persona que despliega el proyecto.
+Debes obtener tu URL en AWS API Gateway → Stages → Invoke URL.
+
+📡 Ejemplo consumiendo la API con Postman (o cualquier cliente REST)
 ✔️ GET — Obtener todos los TODOs
 
 URL:
