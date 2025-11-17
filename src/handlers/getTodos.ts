@@ -1,5 +1,6 @@
 import { getAllTodos } from "../controllers/todo.controller";
 
+// Lambda HTTP que lista todas las tareas almacenadas.
 export const handler = async () => {
   try {
     const todos = await getAllTodos();

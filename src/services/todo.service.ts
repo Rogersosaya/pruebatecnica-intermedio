@@ -1,6 +1,8 @@
+import { Todo } from "../models/todo.model";
 import { ddbDocClient } from "../utils/dynamoClient";
 import { ScanCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 
+// Lee todas las tareas desde la tabla de DynamoDB.
 export async function getTodosDB() {
   const result = await ddbDocClient.send(
     new ScanCommand({ TableName: "todos" })
@@ -8,15 +10,16 @@ export async function getTodosDB() {
   return result.Items;
 }
 
-export async function updateTodoDB(id: string, titulo: string, completada: boolean) {
+// Ejecuta la actualización parcial de una tarea y devuelve los atributos nuevos.
+export async function updateTodoDB(todo: Todo) {
   const result = await ddbDocClient.send(
     new UpdateCommand({
       TableName: "todos",
-      Key: { id: id },
+      Key: { id: todo.id },
       UpdateExpression: "SET titulo = :titulo, completada = :completada",
       ExpressionAttributeValues: {
-        ":titulo": titulo,
-        ":completada": completada,
+        ":titulo": todo.titulo,
+        ":completada": todo.completada,
       },
       ReturnValues: "ALL_NEW",
     })
