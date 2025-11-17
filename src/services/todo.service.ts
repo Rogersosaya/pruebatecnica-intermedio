@@ -1,29 +1,39 @@
-import { Todo } from "../models/todo.model";
+import { Todo, TodoUpdateInput } from "../models/todo.model";
 import { ddbDocClient } from "../utils/dynamoClient";
 import { ScanCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 
 // Lee todas las tareas desde la tabla de DynamoDB.
-export async function getTodosDB() {
+export async function getTodosDB(): Promise<Todo[]> {
   const result = await ddbDocClient.send(
-    new ScanCommand({ TableName: "todos" })
+    new ScanCommand({ TableName: "tec-practicantes-todo" })
   );
-  return result.Items;
+  return (result.Items ?? []) as Todo[];
 }
 
 // Ejecuta la actualización parcial de una tarea y devuelve los atributos nuevos.
-export async function updateTodoDB(todo: Todo) {
+export async function updateTodoDB(id: string, updates: TodoUpdateInput): Promise<Todo> {
+  const setExpressions: string[] = [];
+  const expressionAttributeValues: Record<string, unknown> = {};
+
+  if (updates.titulo !== undefined) {
+    setExpressions.push("titulo = :titulo");
+    expressionAttributeValues[":titulo"] = updates.titulo;
+  }
+
+  if (updates.completada !== undefined) {
+    setExpressions.push("completada = :completada");
+    expressionAttributeValues[":completada"] = updates.completada;
+  }
+
   const result = await ddbDocClient.send(
     new UpdateCommand({
-      TableName: "todos",
-      Key: { id: todo.id },
-      UpdateExpression: "SET titulo = :titulo, completada = :completada",
-      ExpressionAttributeValues: {
-        ":titulo": todo.titulo,
-        ":completada": todo.completada,
-      },
+      TableName: "tec-practicantes-todo",
+      Key: { id },
+      UpdateExpression: `SET ${setExpressions.join(", ")}`,
+      ExpressionAttributeValues: expressionAttributeValues,
       ReturnValues: "ALL_NEW",
     })
   );
 
-  return result.Attributes;
+  return result.Attributes as Todo;
 }

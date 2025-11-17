@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { updateTodo } from "../controllers/todo.controller";
+import { Todo, TodoUpdateInput } from "../models/todo.model";
 
 // Lambda HTTP que actualiza una tarea según el id recibido en la ruta.
 export const handler = async (
@@ -13,8 +14,8 @@ export const handler = async (
         body: JSON.stringify({ mensaje: "Falta el parámetro 'id' en la ruta" }),
       };
     }
-    const body = event.body ? JSON.parse(event.body) : {}; // Evita errores si llega body vacío.
-    const result = await updateTodo(id, body);
+    const body: TodoUpdateInput = event.body ? JSON.parse(event.body) : {}; // Evita errores si llega body vacío.
+    const result: Todo = await updateTodo(id, body);
 
     return {
       statusCode: 200,

@@ -16,7 +16,7 @@ Resources:
   TodoTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: todos
+      TableName: tec-practicantes-todo
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
@@ -32,7 +32,7 @@ Resources:
       CodeUri: src/handlers/
       Policies:
         - DynamoDBReadPolicy:
-            TableName: todos
+            TableName: tec-practicantes-todo
       Events:
         GetTodosEvent:
           Type: Api
@@ -55,7 +55,7 @@ Resources:
       CodeUri: src/handlers/
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: todos
+            TableName: tec-practicantes-todo
       Events:
         UpdateTodoEvent:
           Type: Api

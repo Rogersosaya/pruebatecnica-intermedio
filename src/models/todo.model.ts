@@ -7,6 +7,6 @@ export interface Todo {
 
 // Datos permitidos al momento de actualizar una tarea.
 export interface TodoUpdateInput {
-  titulo: string;
+  titulo?: string;
   completada?: boolean;
 }
